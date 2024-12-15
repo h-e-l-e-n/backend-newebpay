@@ -14,6 +14,10 @@ app.use(Express.json())
 app.use("/", v1Route)
 app.use(Express.static(path.join(__dirname, 'public')));
 
+app.use((req, res, next) => {
+    res.setHeader('Accept-Ranges', 'none');
+    next();
+});
 
 
 const PORT = process.env.PORT || 3300; // 預設本地測試使用 3000
