@@ -7,9 +7,9 @@ app.use(Express.json())
 app.use("/", v1Route)
 app.set('view engine', 'ejs')
 
-const port = 3300
-app.listen(port, () => {
-    console.log(`${port} is on !!`);
+const PORT = process.env.PORT || 3300; // 預設本地測試使用 3000
+app.listen(PORT, () => {
+    console.log(`${PORT} is on !!`);
     
 })
 
