@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
     // 或
     // res.render('index')
 })
-app.use("/", v1Route)
+app.use("/payment", v1Route)
 app.use(Express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
