@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+</head>
+<body>
+    <div id="app">
+    <form action="<%- PayGateWay %>" method="post">
+        <input type="hidden" name="MerchantID" value="<%- MerchantID %>" />
+        <input type="hidden" name="TradeSha" value="<%- order.shaEncrypt %>" />
+        <input type="hidden" name="TradeInfo" value="<%- order.aesEncrypt %>" />
+        <input type="hidden" name="TimeStamp" value="<%- order.TimeStamp %>" />
+        <input type="hidden" name="Version" value="<%- Version %>" />
+        <input type="hidden" name="NotifyUrl" value="<%- NotifyUrl %>" />
+        <input type="hidden" name="ReturnUrl" value="<%- ReturnUrl %>" />        
+        <div>訂單編號：<%- order.MerchantOrderNo %></div>
+        <div>訂單金額：<%- order.Amount %></div>
+        <div>商品名稱：<%- order.ItemDesc %></div>
+        <div>購買者信箱：<%- order.Email %></div>
+        <button type="submit">送出</button>
+    </form>
+    </div>
+</body>
+</html>

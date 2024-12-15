@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title><%= title %></title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.27.2/axios.min.js"></script>
+</head>
+<body>
+    <form action="/createOrder" method="post">
+    <div>
+    信箱：
+        <input type="email" name="Email" value="" />
+    </div>
+    <div>
+    訂單金額：
+        <input type="number" name="Amount" value="100" />
+    </div>
+    <div>
+    商品名稱：
+        <input type="text" name="ItemDesc" value="測試商品" />
+    </div>
+    <button type="submit">送出</button>
+</form>
+</body>
+</html>
