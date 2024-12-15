@@ -14,10 +14,8 @@ app.set('view engine', 'ejs')
 
 app.get('/', (req, res) => {
     res.send('Welcome to the application')
-    // 或
-    // res.render('index')
 })
-app.use("/payment", v1Route)
+app.use("/", v1Route)
 app.use(Express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
