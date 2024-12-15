@@ -1,8 +1,4 @@
 {
-    "version": 2,
-    "builds": [
-    { "src": "app.js", "use": "@vercel/node" }
-    ],
     "routes": [
     { "src": "/payment", "dest": "/app.js" },
     { "src": "/createOrder", "dest": "/app.js" },
@@ -10,5 +6,4 @@
     { "src": "/newebpay_return", "dest": "/app.js" },
     { "src": "/(.*)", "dest": "/app.js" }
     ]
-  }
-  
+}
