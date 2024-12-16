@@ -2,7 +2,7 @@ import 'dotenv/config'
 import crypto from 'crypto'
 
 const orders = {};
-
+const userDetail = null
 const {
     MerchantID,
     HASHKEY,
@@ -59,39 +59,38 @@ export const CheckDetail = (req, res) => {
 }
 //交易成功
 export const PaymentDone = (req, res, next) => {
-    const { Status, MerchantOrderNo } = req.query; // 從查詢參數中取得資料
+    const { Status } = req.query; // 從查詢參數中取得資料
     const success = Status === 'SUCCESS';
-    const { id } = req.params;
-    const order = orders[id]
-
-    console.log('顧客返回資料:', req.query);
 
     // 渲染交易結果頁面
     res.render('success.ejs', {
         title: success ? '交易完成' : '交易失敗',
-        success,
-        order,
-        orderId: MerchantOrderNo || '未知',
+        MerchantOrderNo: userDetail.orderNumber,
+        Amount: userDetail.amount
     });
 };
 
-export const PaymentNotify = (req, res, next) => {
-    console.log('req.body notify data', req.body);
+export const PaymentNotify = async(req, res, next) => {
     const response = req.body;
 
     // 解密交易內容
     const data = createSesDecrypt(response.TradeInfo);
     console.log('解密後的data:', data);
-
-    // 取得交易內容，並查詢本地端資料庫是否有相符的訂單
-    console.log(orders[data?.Result?.MerchantOrderNo]);
-    if (!orders[data?.Result?.MerchantOrderNo]) {
-    console.log('找不到訂單');
-    return res.end();
+    try {
+        await SaveTopupData(data)
+        return res.end();
+    } catch(err) {
+        err.message
     }
-  // 交易完成，將成功資訊儲存於資料庫
-    console.log('付款完成，訂單：', orders[data?.Result?.MerchantOrderNo]);
-    return res.end();
+    
+}
+
+async function SaveTopupData(data) {
+    const { Result } = data
+    userDetail = {
+        orderNumber: Result.MerchantOrderNo,
+        amount: Result.Amt,
+    }
 }
 
 //回傳的參數名稱不可改
