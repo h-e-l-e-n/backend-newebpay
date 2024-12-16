@@ -12,7 +12,9 @@ app.use(Express.urlencoded({ extended: true })); // 處理 URL 編碼的表單�
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs')
 
-
+app.get('/', (req, res) => {
+    res.send('Welcome to the application')
+})
 app.use("/", v1Route)
 app.use(Express.static(path.join(__dirname, 'public')));
 
