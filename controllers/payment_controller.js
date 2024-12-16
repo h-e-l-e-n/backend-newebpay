@@ -57,18 +57,6 @@ export const CheckDetail = (req, res) => {
         ReturnUrl,
     })
 }
-//交易成功
-export const PaymentDone = (req, res, next) => {
-    const { Status } = req.query; // 從查詢參數中取得資料
-    const success = Status === 'SUCCESS';
-
-    // 渲染交易結果頁面
-    res.render('success.ejs', {
-        title: success ? '交易完成' : '交易失敗',
-        MerchantOrderNo: userDetail.orderNumber,
-        Amount: userDetail.amount
-    });
-};
 
 export const PaymentNotify = async(req, res, next) => {
     const response = req.body;
@@ -92,6 +80,19 @@ async function SaveTopupData(data) {
         amount: Result.Amt,
     }
 }
+
+//交易成功
+export const PaymentDone = (req, res, next) => {
+    const { Status } = req.query; // 從查詢參數中取得資料
+    const success = Status === 'SUCCESS';
+
+    // 渲染交易結果頁面
+    res.render('success.ejs', {
+        title: success ? '交易完成' : '交易失敗',
+        MerchantOrderNo: userDetail.orderNumber || 0,
+        Amount: userDetail.amount || 0
+    });
+};
 
 //回傳的參數名稱不可改
 function genDataChain(order) {
