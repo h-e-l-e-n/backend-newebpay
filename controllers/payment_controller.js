@@ -60,40 +60,37 @@ export const CheckDetail = (req, res) => {
 
 export const PaymentNotify = async(req, res, next) => {
     const response = req.body;
-
-    // 解密交易內容
     const data = createSesDecrypt(response.TradeInfo);
-    console.log('解密後的data:', data);
-    try {
-        await SaveTopupData(data)
-        return res.end();
-    } catch(err) {
-        err.message
-    }
     
+    try {
+      // 使用 session 儲存資訊
+    req.session.userDetail = {
+        orderNumber: data.Result.MerchantOrderNo,
+        amount: data.Result.Amt
+    };
+    return res.end();
+    } catch(err) {
+    console.error(err);
+    return res.status(500).end();
+    }
 }
 
-async function SaveTopupData(data) {
-    const { Result } = data
-    userDetail = {
-        orderNumber: Result.MerchantOrderNo,
-        amount: Result.Amt,
-    }
-}
 
 //交易成功
 export const PaymentDone = (req, res, next) => {
-    const { Status } = req.query; // 從查詢參數中取得資料
+    const { Status } = req.query;
     const success = Status === 'SUCCESS';
-
-    // 渲染交易結果頁面
+    
+    // 從 session 讀取資訊
+    const userDetail = req.session.userDetail || {};
+    
     res.render('success.ejs', {
-        title: success ? '交易完成' : '交易失敗',
-        MerchantOrderNo: userDetail.orderNumber || 0,
-        Amount: userDetail.amount || 0
+      title: success ? '交易完成' : '交易失敗',
+      MerchantOrderNo: userDetail.orderNumber || 0,
+      Amount: userDetail.amount || 0
     });
-};
-
+  };
+  
 //回傳的參數名稱不可改
 function genDataChain(order) {
     return `MerchantID=${MerchantID}&TimeStamp=${
