@@ -6,6 +6,7 @@ const v1Route = Express.Router()
 v1Route.get('/payment', PaymentController.Payment)
 v1Route.post('/createOrder', PaymentController.CreateOrder)
 v1Route.get('/check/:id', PaymentController.CheckDetail)
-v1Route.post('/newebpay_return', PaymentController.PaymentDone)
+v1Route.get('/newebpay_return', PaymentController.PaymentDone)
+v1Route.post('/newebpay_notify', PaymentController.PaymentNotify)
 
 export default v1Route

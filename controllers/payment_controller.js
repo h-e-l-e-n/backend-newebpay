@@ -61,6 +61,7 @@ export const CheckDetail = (req, res) => {
 export const PaymentDone = (req, res, next) => {
     const { Status, MerchantOrderNo } = req.query; // 從查詢參數中取得資料
     const success = Status === 'SUCCESS';
+    const { id } = req.params;
     const order = orders[id]
 
     console.log('顧客返回資料:', req.query);
