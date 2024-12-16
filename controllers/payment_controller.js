@@ -57,10 +57,40 @@ export const CheckDetail = (req, res) => {
         ReturnUrl,
     })
 }
+//交易成功
+export const PaymentDone = (req, res, next) => {
+    const { Status, MerchantOrderNo } = req.query; // 從查詢參數中取得資料
+    const success = Status === 'SUCCESS';
+    const order = orders[id]
 
-export const PaymentDone = (req, res) => {
-    console.log('req.body return data', req.body);
-    res.render('success.ejs', { title: 'JoiDone' })
+    console.log('顧客返回資料:', req.query);
+
+    // 渲染交易結果頁面
+    res.render('success.ejs', {
+        title: success ? '交易完成' : '交易失敗',
+        success,
+        order,
+        orderId: MerchantOrderNo || '未知',
+    });
+};
+
+export const PaymentNotify = (req, res, next) => {
+    console.log('req.body notify data', req.body);
+    const response = req.body;
+
+    // 解密交易內容
+    const data = createSesDecrypt(response.TradeInfo);
+    console.log('解密後的data:', data);
+
+    // 取得交易內容，並查詢本地端資料庫是否有相符的訂單
+    console.log(orders[data?.Result?.MerchantOrderNo]);
+    if (!orders[data?.Result?.MerchantOrderNo]) {
+    console.log('找不到訂單');
+    return res.end();
+    }
+  // 交易完成，將成功資訊儲存於資料庫
+    console.log('付款完成，訂單：', orders[data?.Result?.MerchantOrderNo]);
+    return res.end();
 }
 
 //回傳的參數名稱不可改

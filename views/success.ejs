@@ -1,9 +1,14 @@
 <html>
 <head>
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <title><%= title %></title>
 </head>
 <body>
     <h1>恭喜完成付款，錢錢飛走了</h1>
+    <div>訂單編號：<%- order.MerchantOrderNo %></div>
+    <div>訂單金額：<%- order.Amount %></div>    
+    <div><% orderId %></div>
     <a href="https://backend-newebpay.vercel.app/payment">點我回首頁</a>
+
 </body>
 </html>
