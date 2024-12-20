@@ -20,7 +20,7 @@ export const Payment = (req, res) => {
 
 export const CreateOrder = (req, res) => {
     const data = req.body
-    console.log('data:',data);
+    console.log('送出的資料:',data);
 
       // 使用 Unix Timestamp 作為訂單編號（金流也需要加入時間戳記）
     const TimeStamp = Math.round(new Date().getTime() / 1000);
@@ -45,7 +45,7 @@ export const CreateOrder = (req, res) => {
 export const CheckDetail = (req, res) => {
     const { id } = req.params;
     const order = orders[id]
-    console.log(order);
+    console.log('check:',order);
 
     res.render('check.ejs', {
         title: 'JoiCheck',
@@ -61,6 +61,7 @@ export const CheckDetail = (req, res) => {
 export const PaymentNotify = async(req, res, next) => {
     const response = req.body;
     const data = createSesDecrypt(response.TradeInfo);
+    console.log('解密後的資料', data);
     
     try {
       // 使用 session 儲存資訊
@@ -78,17 +79,10 @@ export const PaymentNotify = async(req, res, next) => {
 
 //交易成功
 export const PaymentDone = (req, res, next) => {
-    const { Status } = req.query;
-    const success = Status === 'SUCCESS';
+  const response = req.body;
+  console.log('paymentDone:',response);
     
-    // 從 session 讀取資訊
-    const userDetail = req.session.userDetail || {};
-    
-    res.render('success.ejs', {
-      title: success ? '交易完成' : '交易失敗',
-      MerchantOrderNo: userDetail.orderNumber || 0,
-      Amount: userDetail.amount || 0
-    });
+  res.render('success.ejs', {title: '交易完成' });
   };
   
 //回傳的參數名稱不可改
